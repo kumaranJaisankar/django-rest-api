@@ -19,13 +19,24 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from imggallery.views import GalleryView
+from rest_framework import routers
+from django.conf.urls.static import static
+from django.conf import settings
+
+
+
+router = routers.DefaultRouter()
+router.register('images',GalleryView,basename='image')
 app_name = 'review'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('blog.urls',namespace='blog')),
     path('api/',include('blog_api.urls',namespace='blog_api')),
     path('',include('api.urls',namespace='api')),
+    path('',include(router.urls)),
     path('api-auth/',include('rest_framework.urls',namespace='rest_framework')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
+urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

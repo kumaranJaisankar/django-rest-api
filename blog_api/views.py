@@ -20,4 +20,20 @@ def UserList(request):
     user = User.objects.all()
     serializer = ProductSerializer(user,many=True)
     return Response(serializer.data)
+# @api_view(['GET'])
+# def UserListDet(request,pk):
+#     try :
+#         user = User.objects.filter(id=pk)
+#         serializer = ProductSerializer(user,many=True)
+#         return Response(serializer.data)
+#     except :
+#         return Response({'message':'user not found'})
 
+class UserListDet(generics.RetrieveUpdateAPIView):
+   model = User 
+   serializer_class = ProductSerializer
+   def get_queryset(self):
+       return self.model.objects.filter(id=self.kwargs['pk'])
+       
+   
+    

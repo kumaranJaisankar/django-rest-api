@@ -1,11 +1,12 @@
 from django.urls import path 
-from .views import PostList,PostDetail,UserList
+from .views import PostList,PostDetail,UserList,UserListDet
 
 app_name = 'blog_api'
 urlpatterns = [
     path('<int:pk>/',PostDetail.as_view(),name='detailcreate'),
     path('',PostList.as_view(),name='listcreate'),
     path('users/', UserList,name='users'),
+    path('users/<int:pk>', UserListDet.as_view(),name='users-det'),
    
 ]
 

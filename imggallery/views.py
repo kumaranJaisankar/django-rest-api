@@ -3,12 +3,16 @@ from rest_framework import generics,viewsets
 from .models import Gallery 
 from .serializers import ImgSerializer
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+# from rest_framework.decorators import api_view
+# from rest_framework_simplejwt.authentication import JWTAuthentication 
+# from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 class GalleryView(viewsets.ModelViewSet):
     queryset = Gallery.objects.all()
     serializer_class = ImgSerializer
+    # permission_classes = (IsAuthenticated,)
+    
 
     def post(self, request, *args, **kwargs):
         title = request.data['title']

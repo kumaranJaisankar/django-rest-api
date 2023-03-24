@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     # 'blog',
     # 'blog_api',
     'blog.apps.BlogConfig',
@@ -46,7 +47,20 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt',
+    'rest_framework_swagger',
+    'drf_yasg','accounts',
+    # all auth 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.github',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+
 ]
+SITE_ID =1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -144,13 +158,24 @@ REST_FRAMEWORK = {
     #     'rest_framework.authentication.SessionAuthentication',]
      (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
+
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'access-token'
+JWT_AUTH_REFRESH_COOKIE = 'refresh-token'
+
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
@@ -196,4 +221,44 @@ MEDIA_URL = '/media/'
 # MEDIA_ROOT = BASE_DIR/'media'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://65.2.78.212:8080"
 ]
+
+SWAGGER_SETTINGS = {
+    'JSON_EDITOR': True,
+    'exclude_url_names': [],
+    'exclude_namespaces': [],
+    'api_version': '0.1',
+    'api_path': '/',
+    'relative_paths': False,
+    'enabled_methods': [
+        'get',
+        'post',
+        'put',
+        'patch',
+        'delete'
+    ],
+    'api_key': '',
+    'is_authenticated': False,
+    'is_superuser': False,
+    'unauthenticated_user': 'django.contrib.auth.models.AnonymousUser',
+    'permission_denied_handler': None,
+    'resource_access_handler': None,
+    'base_path':'helloreverb.com/docs',
+    'info': {
+        'contact': 'apiteam@wordnik.com',
+        'description': 'This is a sample server Petstore server. '
+                       'You can find out more about Swagger at '
+                       '<a href="http://swagger.wordnik.com">'
+                       'http://swagger.wordnik.com</a> '
+                       'or on irc.freenode.net, #swagger. '
+                       'For this sample, you can use the api key '
+                       '"special-key" to test '
+                       'the authorization filters',
+        'license': 'Apache 2.0',
+        'licenseUrl': 'http://www.apache.org/licenses/LICENSE-2.0.html',
+        'termsOfServiceUrl': 'http://helloreverb.com/terms/',
+        'title': 'Swagger Sample App',
+    },
+    'doc_expansion': 'none',
+}

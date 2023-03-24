@@ -5,6 +5,7 @@ from .serializers import PostSerializer, ProductSerializer
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.serializers import ModelSerializer
 
 
 # Create your views here.
@@ -34,6 +35,27 @@ class UserListDet(generics.RetrieveUpdateAPIView):
    serializer_class = ProductSerializer
    def get_queryset(self):
        return self.model.objects.filter(id=self.kwargs['pk'])
+   
+
+class SerialiseUser(ModelSerializer):
+    class Meta:
+        model = User 
+        fields = '__all__'
+
+@api_view(['PUT'])
+def ChangeUsername(request,pk):
+    try:
+        user =User.objects.get(id=pk)
+        user.username = request.data['username']
+        user.save()
+        serializer = SerialiseUser(user)
+        return Response(serializer.data)
+    except:
+        return Response({'message':'some error occured'})
+
+
+
+
        
    
     

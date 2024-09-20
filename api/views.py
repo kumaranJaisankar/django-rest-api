@@ -28,7 +28,7 @@ def apiOverview(request):
 """
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
+# @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def ShowAll(request):
     products = Product.objects.all()

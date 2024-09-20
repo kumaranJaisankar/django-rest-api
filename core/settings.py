@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
     'rest_framework.authtoken',
     'dj_rest_auth',
     'dj_rest_auth.registration',
@@ -71,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware', 
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -86,6 +88,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -100,9 +103,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'apidb',
+        'NAME': 'django',
         'USER':'root',
-        'PASSWORD':'kuma',
+        'PASSWORD':'root',
         'HOST':'localhost',
         'PORT':'3306'
     }
@@ -150,15 +153,21 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES':[
-    'rest_framework.permissions.AllowAny',
+      'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES':
-    # ['rest_framework.authentication.BasicAuthentication',
-    #     'rest_framework.authentication.SessionAuthentication',]
-     (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    # 'DEFAULT_PERMISSION_CLASSES':[
+    # 'rest_framework.permissions.AllowAny',
+    # ],
+    # 'DEFAULT_AUTHENTICATION_CLASSES':
+    # # ['rest_framework.authentication.BasicAuthentication',
+    # #     'rest_framework.authentication.SessionAuthentication',]
+    #  (
+    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
+    # ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
 
@@ -170,6 +179,30 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '1081298410716-qg0kr4q81btqklhmua9qu05lmnt47d5d.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    },
+    'github': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': 'Ov23lio0luaDbDcThZWP',
+            'secret': '328d34ea97f111afffc3a95d3687d3d06193728f',
+            'key': ''
+        }
+    }
+}
 
 
 from datetime import timedelta
@@ -221,7 +254,7 @@ MEDIA_URL = '/media/'
 # MEDIA_ROOT = BASE_DIR/'media'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://65.2.78.212:8080"
+    "http://65.2.78.212:8080","http://localhost:5173"
 ]
 
 SWAGGER_SETTINGS = {

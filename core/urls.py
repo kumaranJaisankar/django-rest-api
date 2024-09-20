@@ -28,7 +28,7 @@ from drf_yasg.views import get_schema_view
 from django.views.generic import TemplateView
 from rest_framework_swagger.views import get_swagger_view
 from drf_yasg import openapi
-from accounts.views import FacebookLogin,GithubLogin
+from accounts.views import FacebookLogin,GithubLogin,GoogleLogin
 
 
 # router = routers.DefaultRouter()
@@ -66,5 +66,6 @@ urlpatterns = [
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
      path('dj-rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
     path('dj-rest-auth/github/', GithubLogin.as_view(), name='github_login'),
+    path('dj-rest-auth/google/', GoogleLogin.as_view(), name='google_login')
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
